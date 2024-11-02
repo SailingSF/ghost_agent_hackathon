@@ -26,7 +26,7 @@ def main():
         tools_map=tools_map
     )
 
-    print(agent.submit("Give me 100 words on recent tech news, use your web_search tool."))
+    print(agent.submit("Tell me the last price of Apple stock."))
 
 if __name__ == "__main__":
     main()
