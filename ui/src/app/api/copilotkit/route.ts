@@ -4,7 +4,7 @@ import {
   copilotRuntimeNextJSAppRouterEndpoint,
 } from "@copilotkit/runtime";
 import OpenAI from "openai";
-import { NextRequest } from "next/server";
+import { NextRequest } from "next/server"
 
 
 // const runtime = new CopilotRuntime({
