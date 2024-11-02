@@ -8,7 +8,7 @@ import weave
 app = FastAPI()
  
 # Define your backend action
-@weave.op
+@weave.op(name="get_news_summary")
 async def get_news_summary(query: str):
     tools_map = {"web_search": web_search}
     agent = GeminiAgent(instructions="You are a helpful assistant that retrieves current news.", tools_map=tools_map)
