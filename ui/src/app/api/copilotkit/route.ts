@@ -6,7 +6,6 @@ import {
 import OpenAI from "openai";
 import { NextRequest } from "next/server";
 
-const llmAdapter = new OpenAIAdapter({ openai });
 
 // const runtime = new CopilotRuntime({
 //   remoteActions: [
