@@ -1,12 +1,13 @@
 from openai import OpenAI
 import os
 
-def web_search(query: str) -> str:
+def web_search(query: str, prefix_prompt: str = "Search for recent news about the following query:") -> str:
     '''
     Executes a perplexity search on the web for a given query
 
     Args:
         query (str): The query to search the web with
+        prefix_prompt (str): The prefix prompt to add to the query
 
     Returns:
         str: The search results
@@ -16,7 +17,7 @@ def web_search(query: str) -> str:
 
     messages = [
         {"role": "system", "content": "You are a helpful assistant to a financial newsletter writer that can search the web for information. You search for current relevant information about financial topics and companies."},
-        {"role": "user", "content": query}
+        {"role": "user", "content": f"{prefix_prompt}\n\n{query}"}
     ]
     print(f"Perplexity is executing query:\n {query}")
     response = pplx_client.chat.completions.create(

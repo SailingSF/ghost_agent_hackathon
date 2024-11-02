@@ -11,7 +11,7 @@ app = FastAPI()
 @weave.op
 async def get_news_summary(query: str):
     tools_map = {"web_search": web_search}
-    agent = GeminiAgent(instructions="You are a helpful assistant that summarizes news articles.", tools_map=tools_map)
+    agent = GeminiAgent(instructions="You are a helpful assistant that retrieves current news.", tools_map=tools_map)
     response = agent.submit(query)
     return response
  
@@ -34,12 +34,12 @@ action_get_news = CopilotAction(
 sdk = CopilotKitSDK(actions=[action_get_news])
  
 # Add the CopilotKit endpoint to your FastAPI app
-add_fastapi_endpoint(app, sdk, "/copilotkit_remote")
+add_fastapi_endpoint(app, sdk, "/copilotkit")
  
 def main():
     """Run the uvicorn server."""
     import uvicorn
-    uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
  
 if __name__ == "__main__":
     main()
