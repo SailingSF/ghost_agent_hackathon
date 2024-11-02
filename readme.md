@@ -14,6 +14,12 @@ This repository contains both Python backend and React frontend components.
 
 1. Create a virtual environment:
 
-```bash
-python -
-</rewritten_file>    
+`python -m venv venv`
+
+2. Activate the virtual environment:
+
+`source venv/bin/activate`
+
+3. Install Node.js dependencies:
+
+`npm install`
