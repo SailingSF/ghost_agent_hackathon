@@ -1,10 +1,12 @@
-# Project Name
+# Ghost Agent
 
-This repository contains both Python backend and React frontend components.
+A frontend and backend for an AI system to help with research and writing putting humans in the loop for writing stories.
+Uses Gemini for the LLM
+Uses CopilotKit for the frontend and agent framework
 
 ## Prerequisites
 
-- Python 3.8 or higher
+- Python 3.8-3.12
 - Node.js 16.x or higher
 - npm 8.x or higher
 
@@ -20,6 +22,10 @@ This repository contains both Python backend and React frontend components.
 
 `source venv/bin/activate`
 
-3. Install Node.js dependencies:
+3. Install Python dependencies:
+
+`pip install -r requirements.txt`
+
+4. Install Node.js dependencies:
 
 `npm install`
