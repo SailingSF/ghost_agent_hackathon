@@ -3,10 +3,12 @@ from copilotkit.integrations.fastapi import add_fastapi_endpoint
 from copilotkit import CopilotKitSDK, Action as CopilotAction
 from agents import GeminiAgent
 from agent_tools import web_search
+import weave
 
 app = FastAPI()
  
 # Define your backend action
+@weave.op
 async def get_news_summary(query: str):
     tools_map = {"web_search": web_search}
     agent = GeminiAgent(instructions="You are a helpful assistant that summarizes news articles.", tools_map=tools_map)
