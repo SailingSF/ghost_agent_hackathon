@@ -24,12 +24,8 @@ function Home() {
     <CopilotKit
       runtimeUrl="/api/copilotkit"
       showDevConsole={false}
+      // agent={agent}
     >
-    {/* <CopilotKit
-      runtimeUrl="/api/copilotkit"
-      showDevConsole={false}
-      agent={agent}
-    > */}
       <Main />
     </CopilotKit>
   );

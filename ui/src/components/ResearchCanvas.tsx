@@ -82,7 +82,7 @@ export function ResearchCanvas() {
     setState({ ...state, resources });
   };
 
-  // const [resources, setResources] = useState<Resource[]>(dummyResources);
+  
   const [newResource, setNewResource] = useState<Resource>({
     url: "",
     title: "",
