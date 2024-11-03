@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import datetime
 
@@ -8,15 +8,9 @@ class User(BaseModel):
     first_name: str
     last_name: str
 
-class Story(BaseModel):
-    id: int
-    title: str
-    user_id: int
-    created_at: datetime
-    outline: StoryOutline
-
 class StoryOutline(BaseModel):
     id: int
+    story_id: int
     title: str
     themes: list[str]
     characters: list[str]
@@ -28,4 +22,13 @@ class StoryPart(BaseModel):
     story_id: int
     part_number: int
     content: str
+
+class Story(BaseModel):
+    model_config = ConfigDict(json_encoders={datetime: lambda dt: dt.isoformat()})
+    
+    id: int
+    title: str
+    user_id: int
+    created_at: datetime
+    outline: Optional[StoryOutline] = None
 
