@@ -1,9 +1,18 @@
 from fastapi import FastAPI
 from copilotkit.integrations.fastapi import add_fastapi_endpoint
 from copilotkit import CopilotKitSDK, Action as CopilotAction
-from agents import GeminiAgent
+from agents import GeminiAgent, OpenAIAgent
+import google.generativeai as genai
 from agent_tools import web_search
 import weave
+from pydantic import BaseModel
+import os
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 app = FastAPI()
  
@@ -35,7 +44,24 @@ sdk = CopilotKitSDK(actions=[action_get_news])
  
 # Add the CopilotKit endpoint to your FastAPI app
 add_fastapi_endpoint(app, sdk, "/copilotkit")
- 
+
+@weave.op(name="create_written_story")
+async def create_written_story(notes: str):
+    genai.configure(api_key=os.environ["GOOGLE_GEMINI_API_KEY"])
+    model = genai.GenerativeModel(model_name="gemini-1.5-pro")
+    prompt = f"Create a well-written story based on the following notes and outline in JSON format: {notes}\n\n Your story will be in raw text."
+    response = model.generate_content(prompt)
+
+    return response.text
+
+class StoryRequest(BaseModel):
+    notes: str  # This will accept any string, including JSON strings
+
+@app.post("/write_story")
+async def write_story(request: StoryRequest):
+    story = await create_written_story(request.notes)
+    return {"story": story}
+
 def main():
     """Run the uvicorn server."""
     import uvicorn
