@@ -65,7 +65,7 @@ add_fastapi_endpoint(app, sdk, "/copilotkit")
 async def create_written_story(notes: str):
     genai.configure(api_key=os.environ["GOOGLE_GEMINI_API_KEY"])
     model = genai.GenerativeModel(model_name="gemini-1.5-pro", system_instruction="You are a helpful assistant that creates a well-written story based on the provided notes and outline. You return just the story, no other text.")
-    prompt = f"Create a well-written story based on the following notes and outline in JSON format: {notes}\n\nYour story will be in raw text and 500 words."
+    prompt = f"Create a well-written story based on the following notes and outline in JSON format: {notes}\n\nYour story will be in raw plain text."
     response = model.generate_content(prompt)
 
     return response.text
@@ -99,7 +99,10 @@ async def create_story_outline(request: StoryOutlineRequest) -> dict:
     completion = client.beta.chat.completions.parse(
         model="gpt-4o-mini", 
         messages=[
-            {"role": "system", "content": "You are a helpful assistant that creates a story outline based on the provided notes. You return just the outline in JSON format with title, themes, characters, setting, and plot_points fields. Return every specified field."},
+            {"role": "system", "content": """You are AI ghostwriter that is filling out a story outline based on the provided notes. 
+                 ONLY extract information fromthe words of the client. If you have no content for a field, you MUST fill in with the word 'EMPTY' OR an empty list.
+                 Then think about whether you made up the field or not. If it is made up, you MUST replace it with the word 'EMPTY'.
+                 Again, NOTHING in the outline can be made up and it is VERY likely that some fields will be EMPTY. This outline will replace the outline in the current state."""},
             {"role": "user", "content": f"""This is the previous outline:\n{request.previous_outline}\n\n
             Create a new story outline by filling in the required fields for the outline.
             
