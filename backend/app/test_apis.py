@@ -35,5 +35,38 @@ def test_lookup_news():
     response = requests.post(url, json={"query": "Apple"})
     print(response.json())
 
+def test_create_story_outline():
+    url = "http://localhost:8000/create_story_outline"
+    conversation = '''
+    {
+        "assistant": "What is the story about?",
+        "user": "It's about a frog king is getting old and needs a successor as ruler of the swamp.",
+        "assistant": "Interesting, what are the main characters?",
+        "user": "There's the frog king, his son the prince, a beautiful frog lady who is the prince's love interest, and a toad advisor who is trying to take over the swamp.",
+        "assistant": "What is the setting of the story?",
+        "user": "The story is set in a swamp with ancient cypress trees, murky waters, and hidden dangers.",
+        "assistant": "What are the major plot points of the story?",
+        "user": "There's the frog king's decline, the appearance of the beautiful frog lady, the betrayal of the toad advisor, and a final confrontation at the witch's hut."
+    }
+    '''
+    previous_outline = '''
+        {"Title":"The Doggy Prince of the Beach","Themes":["Power struggles","Loyalty and betrayal","Puppy love"],"Characters":[{"Name":"Air Bud","Description":"A golden retriever who plays basketball"},{"Name":"Prince Rabbit","Description":"The prince and a hare"},{"Name":"Lady Greenleaf","Description":"A mysterious and beautiful frog who becomes Prince Ribbit's love interest"},{"Name":"Iago the Toad","Description":"A manipulative and cunning advisor to King Croak and Air Bud's best friend."}],"Setting":"Connecticut","Major Plot Points":["Beach party","Air Bud's basketball game","Iago's betrayal","Final confrontation"]}
+    '''
+    data = {
+        "conversation": conversation,
+        "previous_outline": previous_outline
+    }
+    
+    try:
+        response = requests.post(url, json=data)
+        response.raise_for_status()
+        print("Story outline created successfully!")
+        print(json.dumps(response.json(), indent=2))
+    except requests.exceptions.RequestException as e:
+        print(f"Error making request: {e}")
+        if hasattr(e, 'response'):
+            print(f"Response status code: {e.response.status_code}")
+            print(f"Response text: {e.response.text}")
+
 if __name__ == "__main__":
-    test_write_story()
+    test_create_story_outline()
