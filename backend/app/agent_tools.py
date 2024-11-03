@@ -1,6 +1,10 @@
 from openai import OpenAI
 import os
+from humanlayer import HumanLayer
 
+hl = HumanLayer.cloud(verbose=True)
+
+@hl.require_approval()
 def web_search(query: str, prefix_prompt: str = "Search for recent news about the following query:") -> str:
     '''
     Executes a perplexity search on the web for a given query

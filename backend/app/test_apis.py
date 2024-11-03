@@ -118,4 +118,4 @@ def test_save_story_with_outline():
         raise
 
 if __name__ == "__main__":
-    test_save_story_with_outline()
+    test_lookup_news()
