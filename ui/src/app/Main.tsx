@@ -112,8 +112,10 @@ export default function Main() {
               setState({ ...state, logs: [] });
               await new Promise((resolve) => setTimeout(resolve, 30));
             }}
+            instructions="You are a ghostwriter interviewing a person to write their story. 
+    You need to reply to the user's message in a way that helps you enrich their story. Ask good engaging questions like an experienced ghostwriter would. Only ask one question at a time. Update the outline as you go and write the story when asked."
             labels={{
-              initial: "Hi! How can I assist you with your research today?",
+              initial: "Hi I'm Ghost! Tell me about a story that you want to write about.",
             }}
           />
         </div>
