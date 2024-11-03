@@ -12,6 +12,10 @@ import typing_extensions as typing
 import os
 import logging
 import json
+from data_models import User, Story, StoryOutline, StoryPart
+from supabase_functions import get_user_by_id, create_story, create_story_outline, create_story_part, update_story, update_story_outline
+from datetime import datetime
+from fastapi import HTTPException
 
 logging.basicConfig(
     level=logging.INFO,
@@ -69,7 +73,7 @@ async def create_written_story(notes: str):
 class StoryRequest(BaseModel):
     notes: str
 
-class StoryOutline(BaseModel):
+class OutlineRequest(BaseModel):
     title: str
     themes: list[str]
     characters: list[str]
@@ -112,6 +116,88 @@ async def create_story_outline(request: StoryOutlineRequest) -> dict:
         response_format=StoryOutline
     )
     return {"outline": completion.choices[0].message.parsed}
+
+# Add this new request model
+class CreateStoryWithOutlineRequest(BaseModel):
+    user_id: int
+    title: str
+    outline: OutlineRequest
+    content: str
+
+@app.post("/save_story_with_outline")
+async def save_story_with_outline(request: CreateStoryWithOutlineRequest) -> dict:
+    try:
+        # Get the user (for validation)
+        try:
+            user = await get_user_by_id(request.user_id)
+        except Exception as e:
+            logging.error(f"Error getting user: {e}")
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Create the story first
+        story = Story(
+            id=0,
+            title=request.title,
+            user_id=request.user_id,
+            created_at=datetime.utcnow(),
+            outline=None
+        )
+        
+        try:
+            created_story = await create_story(story)
+        except Exception as e:
+            logging.error(f"Error creating story: {e}")
+            raise HTTPException(status_code=500, detail="Failed to create story")
+        
+        # Create the outline with story_id
+        outline = StoryOutline(
+            id=0,
+            story_id=created_story.id,
+            title=request.outline.title,
+            themes=request.outline.themes,
+            characters=request.outline.characters,
+            setting=request.outline.setting,
+            plot_points=request.outline.plot_points
+        )
+        
+        try:
+            created_outline = await create_story_outline(outline)
+        except Exception as e:
+            logging.error(f"Error creating outline: {e}")
+            raise HTTPException(status_code=500, detail="Failed to create outline")
+        
+        # Create the story part
+        story_part = StoryPart(
+            id=0,
+            story_id=created_story.id,
+            part_number=1,
+            content=request.content
+        )
+        
+        try:
+            created_part = await create_story_part(story_part)
+        except Exception as e:
+            logging.error(f"Error creating story part: {e}")
+            raise HTTPException(status_code=500, detail="Failed to create story part")
+        
+        # Update story with the created outline
+        created_story.outline = created_outline
+        updated_story = await update_story(created_story)
+        
+        # Convert to dict and handle datetime serialization
+        response_data = {
+            "story": updated_story.model_dump(),
+            "outline": created_outline.model_dump(),
+            "part": created_part.model_dump()
+        }
+        
+        return response_data
+        
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        logging.error(f"Error saving story with outline: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 def main():
     """Run the uvicorn server."""
