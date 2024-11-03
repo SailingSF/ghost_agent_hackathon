@@ -117,9 +117,9 @@ class GeminiAgent:
         
         self.model = genai.GenerativeModel(
             model_name=model_name,
-            tools=tools  # Pass the formatted tools
+            tools=tools,
+            system_instruction=instructions
         )
-        self.instructions = instructions
         self.chat = self.model.start_chat(
             enable_automatic_function_calling=True if tools else False
         )
