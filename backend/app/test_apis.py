@@ -30,5 +30,10 @@ def test_write_story():
         print(f"Error: {response.status_code}")
         print(response.text)
 
+def test_lookup_news():
+    url = "http://localhost:8000/copilotkit"
+    response = requests.post(url, json={"query": "Apple"})
+    print(response.json())
+
 if __name__ == "__main__":
     test_write_story()

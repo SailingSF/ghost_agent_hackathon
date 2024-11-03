@@ -48,14 +48,14 @@ add_fastapi_endpoint(app, sdk, "/copilotkit")
 @weave.op(name="create_written_story")
 async def create_written_story(notes: str):
     genai.configure(api_key=os.environ["GOOGLE_GEMINI_API_KEY"])
-    model = genai.GenerativeModel(model_name="gemini-1.5-pro")
+    model = genai.GenerativeModel(model_name="gemini-1.5-pro", system_instruction="You are a helpful assistant that creates a well-written story based on the provided notes and outline. You return just the story, no other text.")
     prompt = f"Create a well-written story based on the following notes and outline in JSON format: {notes}\n\n Your story will be in raw text."
     response = model.generate_content(prompt)
 
     return response.text
 
 class StoryRequest(BaseModel):
-    notes: str  # This will accept any string, including JSON strings
+    notes: str
 
 @app.post("/write_story")
 async def write_story(request: StoryRequest):
