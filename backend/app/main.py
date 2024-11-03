@@ -16,6 +16,9 @@ from data_models import User, Story, StoryOutline, StoryPart
 from supabase_functions import get_user_by_id, create_story, create_story_outline, create_story_part, update_story, update_story_outline
 from datetime import datetime
 from fastapi import HTTPException
+from humanlayer import HumanLayer
+
+hl = HumanLayer.cloud(verbose=True)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -32,8 +35,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
  
-# Define your backend action
 @weave.op(name="get_news_summary")
+@hl.require_approval()
 async def get_news_summary(query: str):
     tools_map = {"web_search": web_search}
     agent = GeminiAgent(instructions="You are a helpful assistant that retrieves current news.", tools_map=tools_map)
