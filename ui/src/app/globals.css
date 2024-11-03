@@ -4,6 +4,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  color: white;
 }
 
 @layer utilities {
@@ -77,6 +78,10 @@ body {
   }
 }
 
+.copilotKitMessages {
+  border-radius: 0.5em;
+}
+
 .copilotKitMessage.copilotKitUserMessage {
   border-radius: 0.5rem 0.5rem 0 0.5rem;
 }
@@ -90,29 +95,30 @@ body {
 }
 
 .copilotKitChat {
-  background-color: #fdf5e0;
+  background-color: #1f2937;
 }
 
 .copilotKitResponseButton {
   background-color: transparent;
-  color: var(--copilot-kit-secondary-color);
+  color: #1f2937;
   border: 0px;
 }
 
 .copilotKitInput {
   border-top: none;
-  background-color: white;
+  background-color: #4b5563;
   margin-bottom: 20px;
   margin-left: 30px;
   margin-right: 30px;
   border-radius: 10px;
+  padding: 0.5rem 1rem;
 }
 
 .copilotKitInput > textarea {
-  background-color: white;
-  color: black;
+  background-color: #4b5563;
+  color: #d1d5db;
 }
 
 .copilotKitInput > .copilotKitInputControls > button:not([disabled]) {
-  color: var(--copilot-kit-secondary-color);
+  color: #fff;
 }

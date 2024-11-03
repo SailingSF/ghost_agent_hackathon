@@ -82,7 +82,7 @@ export function ResearchCanvas() {
     setState({ ...state, resources });
   };
 
-  // const [resources, setResources] = useState<Resource[]>(dummyResources);
+  
   const [newResource, setNewResource] = useState<Resource>({
     url: "",
     title: "",
@@ -128,7 +128,7 @@ export function ResearchCanvas() {
   };
 
   return (
-    <div className="container w-full h-full p-10 bg-[#fffbf5]">
+    <div className="container w-full h-full p-10 bg-gray-800">
       <div className="space-y-8">
         <div>
           <h2 className="text-lg font-medium mb-3 text-primary">
